@@ -1,0 +1,7 @@
+*.log
+*.pdf
+*.psd
+node_modules/
+Thumbs.db
+dist/*.json
+dist/*hot-update.js

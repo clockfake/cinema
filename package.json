@@ -1,0 +1,11 @@
+{
+  "name": "cinema",
+  "version": "1.0.0",
+  "description": "Cinema tickets selling app",
+  "main": "index.js",
+  "scripts": {
+    "test": "build"
+  },
+  "author": "",
+  "license": "ISC"
+}
