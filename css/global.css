@@ -28,3 +28,14 @@ body {
 .seats-list__seat--taken {
   background-color: yellow;
 }
+
+.seats-list__hidden {
+  display: none;
+}
+
+.session__heading {
+  margin: 10px;
+  padding: 30px;
+  background-color: #ccc;
+  border-radius: 7px;
+}
