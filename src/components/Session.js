@@ -1,15 +1,18 @@
 import React from 'react';
-import SeatsList from './SeatsList.js';
+// import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 export default class Session extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
-    return (<div>
-            <h3 className="session__heading" onClick={() => this.props.onSelect()}>{this.props.session.name}</h3>
-            <SeatsList shouldShow={this.props.shouldShow} seats={this.props.session.seats} onClick={(index) => this.props.onClick(index)} />
+    let options = {hour: '2-digit', minute: '2-digit'}
+    const datetime = new Date(this.props.session.datetime).toLocaleString('ru',options);
+    return (<div className="session" onClick={() => this.props.onSelect()}>
+              <span className="session__time">{datetime}</span>
            </div>);
   }
+}
+
+Session.propTypes = {
+  session: PropTypes.object
 }
