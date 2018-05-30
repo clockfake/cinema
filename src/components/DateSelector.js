@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 
 class DateSelector extends React.Component {
 
@@ -31,9 +30,6 @@ class DateSelector extends React.Component {
   }
 }
 
-DateSelector.propTypes = {
-  daysList: PropTypes.array
-}
 
 export default connect(
   state => ({

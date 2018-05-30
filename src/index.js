@@ -46,7 +46,7 @@ function appManager(state = initialState, action) {
     return {
       ...state,
       pendingSeats: pendingSeats
-    }  
+    }
   };
 
   if (action.type == 'CLOSE_SEATSLIST') {
@@ -74,7 +74,7 @@ function appManager(state = initialState, action) {
       ...state,
       activeSession: null,
       sessions: sessions,
-      pendingseats: []
+      pendingSeats: []
     }
   };
 

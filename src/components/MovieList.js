@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Movie from './Movie.js';
-import compareDates from '../index.js';
 
 class MovieList extends React.Component {
 

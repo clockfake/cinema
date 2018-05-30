@@ -4,11 +4,6 @@ import PropTypes from 'prop-types';
 
 class SeatsList extends React.Component {
 
-  // handleClick(seat) {
-  //   let seatBought = {seat: seat, session: this.props.activeSession}
-  //   this.props.onBuySeat(seat);
-  // }
-
   handleClick(seat) {
     if (!this.props.sessions[this.props.activeSession].seats[seat]) {
       if (this.props.pendingSeats.length<5) {this.props.onSelectSeat(seat)} else {

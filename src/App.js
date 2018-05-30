@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import SeatsList from './components/SeatsList.js';
 import DateSelector from './components/DateSelector.js';
 import MovieList from './components/MovieList.js';
