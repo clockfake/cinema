@@ -28,7 +28,8 @@ const initialState = {
   sessions: sessions,
   activeSession: null,
   daysList: daysList,
-  activeDate: daysList[0]
+  activeDate: 0,
+  pendingSeats: []
 }
 
 function appManager(state = initialState, action) {
@@ -39,8 +40,8 @@ function appManager(state = initialState, action) {
     }
   };
 
-  if (action.type == 'BUY_SEAT') {
-    let sessions = state.sessions.slice();
+  if (action.type == 'SELECT_SEAT') {
+    let seats = state.sessions.slice();
     sessions[action.payload.session].seats[action.payload.seat] = true;
     return {
       ...state,

@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import Session from './Session.js';
 
 class Movie extends React.Component {
@@ -13,6 +12,7 @@ class Movie extends React.Component {
     return (
       <div className='movie'>
       <h3 className='movie__name'>{this.props.name}</h3>
+      <span>Сеансы:</span>
       {this.props.sessions.map(i => {
         return (<Session key={i.id} session={i} onSelect={() => this.handleSelect(i.id)}/>);
       })

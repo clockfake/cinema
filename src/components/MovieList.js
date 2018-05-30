@@ -1,13 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import Movie from './Movie.js';
+import compareDates from '../index.js';
 
 class MovieList extends React.Component {
-
-  handleSelect(id) {
-    this.props.onSelectSession(id);
-  }
 
   render() {
     let movieList = [];
@@ -39,22 +35,11 @@ class MovieList extends React.Component {
   }
 }
 
-MovieList.propTypes = {
-  daysList: PropTypes.array
-}
-
 export default connect(
   state => ({
     sessions: state.sessions.filter((i) => {
-      let activeDay = state.activeDate.getDate();
-      let activeMonth = state.activeDate.getMonth();
       let date = new Date(i.datetime);
-      return (date.getDate() == activeDay && date.getMonth() == activeMonth)
+      return date.getDate() == state.daysList[state.activeDate].getDate() && date.getMonth() == state.daysList[state.activeDate].getMonth();
     })
   }),
-  dispatch => ({
-    onSelectSession: (id) => {
-      dispatch({type: 'SELECT_SESSION', payload: id});
-    }
-  })
-)(MovieList);
+  dispatch => ({}))(MovieList);

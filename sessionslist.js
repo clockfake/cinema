@@ -6,20 +6,21 @@ export default function generateSessions(inputDate) {
   let date_i = new Date(inputDate.getFullYear(),inputDate.getMonth(),inputDate.getDate());
   date_i.setHours(9);
   let sessions = [];
-  for (let j=0;j<7;) {
+  for (let j=0;j<15;) {
+    let seats = Array.from({length: 100}, () => Math.random()*4 < 1);
     sessions.push({
       id: n++,
       name: filmsname[i++],
       datetime:date_i.toJSON(),
-      seats: Array(100).fill(false)
+      seats: [...seats]
     });
     if (i==filmsname.length) i=0;
-    date_i.setHours(date_i.getHours()+2);
-    if (date_i.getHours() > 21) {
+    if (date_i.getHours() == 23) {
       date_i.setDate(date_i.getDate()+1);
-      date_i.setHours(11);
+      date_i.setHours(9);
       j++;
     }
+    date_i.setHours(date_i.getHours()+2);
   }
   return sessions;
 }

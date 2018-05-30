@@ -1,6 +1,4 @@
 import React from 'react';
-// import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 
 export default class Session extends React.Component {
 
@@ -11,8 +9,4 @@ export default class Session extends React.Component {
               <span className="session__time">{datetime}</span>
            </div>);
   }
-}
-
-Session.propTypes = {
-  session: PropTypes.object
 }
