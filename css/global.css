@@ -137,7 +137,7 @@ body {
   top: 50%;
   z-index: 11;
   margin-left: -210px;
-  margin-top: -210px;
+  margin-top: -360px;
   padding: 30px;
   background-color: #eeeeee;
 }
@@ -164,10 +164,18 @@ body {
   cursor: pointer;
 }
 
+.seats__item--pending {
+  background-color: green;
+}
+
 .seats__item--taken {
   background-color: yellow;
 }
 
 .seats--closed {
+  display: none;
+}
+
+.seats__pending-overall--hidden {
   display: none;
 }

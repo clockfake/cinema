@@ -41,18 +41,19 @@ function appManager(state = initialState, action) {
   };
 
   if (action.type == 'SELECT_SEAT') {
-    let seats = state.sessions.slice();
-    sessions[action.payload.session].seats[action.payload.seat] = true;
+    let pendingSeats = state.pendingSeats.slice();
+    pendingSeats.push(action.payload);
     return {
       ...state,
-      sessions: sessions
-    }
+      pendingSeats: pendingSeats
+    }  
   };
 
   if (action.type == 'CLOSE_SEATSLIST') {
     return {
       ...state,
-      activeSession: null
+      activeSession: null,
+      pendingSeats: []
     }
   };
 
@@ -60,6 +61,20 @@ function appManager(state = initialState, action) {
     return {
       ...state,
       activeDate: action.payload
+    }
+  };
+
+  if (action.type == 'CONFIRM_PURCHASE') {
+    let pendingSeats = state.pendingSeats.slice();
+    let sessions = state.sessions.slice();
+    pendingSeats.forEach( (i) => {
+      sessions[action.payload].seats[i] = true;
+    })
+    return {
+      ...state,
+      activeSession: null,
+      sessions: sessions,
+      pendingseats: []
     }
   };
 

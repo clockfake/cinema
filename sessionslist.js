@@ -1,4 +1,4 @@
-let filmsname=['Бойцовский клуб', 'Буч Кэссиди и Сандэнс Кид', 'Генетическая опера', 'Мост в Терабитию'];
+let filmsname=['Бойцовский клуб', 'Буч Кэссиди и Сандэнс Кид', 'Генетическая опера', 'Мост в Терабитию', 'Славные парни'];
 
 export default function generateSessions(inputDate) {
   let i = 0;
@@ -12,12 +12,13 @@ export default function generateSessions(inputDate) {
       id: n++,
       name: filmsname[i++],
       datetime:date_i.toJSON(),
-      seats: [...seats]
+      seats: [...seats],
+      cost: 300
     });
     if (i==filmsname.length) i=0;
-    if (date_i.getHours() == 23) {
+    if (date_i.getHours() >= 22) {
       date_i.setDate(date_i.getDate()+1);
-      date_i.setHours(9);
+      date_i.setHours(Math.random()>0.5? 6 : 7);
       j++;
     }
     date_i.setHours(date_i.getHours()+2);
