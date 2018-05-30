@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class SeatsList extends React.Component {
 
   handleClick(seat) {
-    if (!this.props.sessions[this.props.activeSession].seats[seat]) {
+    if (!this.props.sessions[this.props.activeSession].seats[seat] && this.props.pendingSeats.indexOf(seat) == -1) {
       if (this.props.pendingSeats.length<5) {this.props.onSelectSeat(seat)} else {
         alert('Лимит заказа билетов на сеанс: 5 билетов');
       }
