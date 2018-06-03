@@ -5,6 +5,7 @@ import Movie from './Movie.js';
 class MovieList extends React.Component {
 
   render() {
+    //need to reform date structure to match "given day -> movies thats go in this day -> sessions for given movie that runs that day"
     let movieList = [];
     let filmExists;
     this.props.sessions.forEach( (i) => {

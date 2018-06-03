@@ -1,38 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
+import {composeWithDevTools} from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 import generateSessions from '../sessionslist.js';
 import App from './App.js';
 
-Object.defineProperty(Array.prototype, 'dateIncludes', {
-  value: function(element) {
+function dateIncludes(array, element) {
     let returnvalue = false;
-    this.forEach( (i) => {
+    array.forEach( (i) => {
       if (i.getDate() == element.getDate() && i.getMonth() == element.getMonth()) returnvalue = true;
     });
     return returnvalue;
-  }
-});
-
-const initdate = new Date();
-const sessions = generateSessions(initdate);
-let daysList = [];
-sessions.forEach( (i) => {
-  let date = new Date(i.datetime);
-  date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0));
-  if (!daysList.dateIncludes(date)) daysList.push(date);
-});
+};
 
 const initialState = {
-  sessions: sessions,
+  sessions: [],
   activeSession: null,
-  daysList: daysList,
+  daysList: [],
   activeDate: 0,
   pendingSeats: []
 }
 
 function appManager(state = initialState, action) {
+  if (action.type == 'FETCH_SESSIONS_SUCCESS') {
+    const sessions = action.payload;
+    let daysList = [];
+    sessions.forEach( (i) => {
+      let date = new Date(i.datetime);
+      date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0));
+      if (!dateIncludes(daysList, date)) daysList.push(date);
+    });
+    return {
+      ...state,
+      sessions: sessions,
+      daysList: daysList
+    }
+  };
   if (action.type == 'SELECT_SESSION') {
     return {
       ...state,
@@ -81,7 +86,7 @@ function appManager(state = initialState, action) {
   return state;
 }
 
-const store = createStore(appManager, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(appManager, composeWithDevTools(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>

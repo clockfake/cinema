@@ -73,6 +73,12 @@ body {
   cursor: pointer;
 }
 
+.session--disabled, .session--disabled:hover {
+  background-color: #ddd;
+  color: grey;
+  cursor: default;
+}
+
 .movie {
   background-color: #ddd;
   padding: 10px;

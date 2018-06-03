@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Session from './Session.js';
+// import Session from './Session.js';
 
 class Movie extends React.Component {
 
@@ -13,10 +13,7 @@ class Movie extends React.Component {
       <div className='movie'>
       <h3 className='movie__name'>{this.props.name}</h3>
       <span>Сеансы:</span>
-      {this.props.sessions.map(i => {
-        return (<Session key={i.id} session={i} onSelect={() => this.handleSelect(i.id)}/>);
-      })
-      }
+      {this.props.sessions.map(i => (<Session key={i.id} session={i} onSelect={() => this.handleSelect(i.id)}/>))}
       </div>
     );
   }
@@ -30,3 +27,13 @@ export default connect(
     }
   })
 )(Movie);
+
+
+function Session(props) {
+    let options = {hour: '2-digit', minute: '2-digit'};
+    let dateNow = new Date();
+    const datetime = new Date(props.session.datetime);
+    return (<span className={dateNow.getTime() > datetime.getTime() ? "session  session--disabled" : "session"}
+              onClick={() => {
+                if (dateNow.getTime() < datetime.getTime()) return props.onSelect()}}>{datetime.toLocaleString('ru',options)}</span>);
+}

@@ -9,6 +9,8 @@ class DateSelector extends React.Component {
 
   render() {
     let options = {day: 'numeric', month: 'long'}
+
+    //selects 4 days out of all days of film disribution
     let daysList = [];
     if (this.props.daysList.length<=4) {daysList = [...this.props.daysList]} else {
       if (this.props.activeDate == 0) {daysList = this.props.daysList.slice(0,4)} else {
@@ -22,8 +24,7 @@ class DateSelector extends React.Component {
         {daysList.map( (i) => {
           let index = this.props.daysList.indexOf(i);
           let date = i.toLocaleString('ru',options);
-          let highlightDate = (index == this.props.activeDate);
-          return (<li className={highlightDate? "days__item  days__item--highlighted": "days__item"} key={index} onClick={() => this.dateSelect(index)}>{date}</li>)
+          return (<li className={index == this.props.activeDate? "days__item  days__item--highlighted": "days__item"} key={index} onClick={() => this.dateSelect(index)}>{date}</li>)
         })}
       </ul>
     );
