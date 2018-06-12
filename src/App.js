@@ -3,7 +3,7 @@ import SeatsList from './components/SeatsList.js';
 import DateSelector from './components/DateSelector.js';
 import MovieList from './components/MovieList.js';
 import {connect} from 'react-redux';
-import generateSessions from '../sessionslist.js';
+import generateSessions from '../sessionsgenerator.js';
 
 class App extends React.Component {
 
@@ -27,12 +27,16 @@ export default connect(
   dispatch => ({
     onGetSessions: () => {
       const getSessions = () => dispatch => {
-        setTimeout( () => {
-          let inputDate = new Date();
-          let result = generateSessions(inputDate);
-          if (result != undefined) {dispatch({ type: 'FETCH_SESSIONS_SUCCESS', payload: generateSessions(inputDate)})}
-          else (dispatch({type: 'FETCH_SESSIONS_FAIL', payload: null}))
-        }, 1500)
+        let inputDate = new Date();
+        let sessionPromise = generateSessions.generate(inputDate);
+        sessionPromise.then(
+          function(result) {
+            dispatch({ type:'FETCH_SESSIONS_SUCCESS', payload: result})
+          },
+          function(error) {
+            dispatch({type:'FETCH_SESSIONS_FAIL'}, payload: error)
+          }
+        )
       }
       dispatch(getSessions());
     }

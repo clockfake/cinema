@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import PendingSeat from './PendingSeat.js';
 
 class SeatsList extends React.Component {
 
@@ -19,6 +19,10 @@ class SeatsList extends React.Component {
 
   closeSeatsList() {
     this.props.onCloseSeatsList();
+  }
+
+  cancelSelect() {
+    this.props.onCancelSelect();
   }
 
   render() {
@@ -41,6 +45,7 @@ class SeatsList extends React.Component {
         </ul>
       <button className='seats__close-btn' onClick={() => this.closeSeatsList()}>Close</button>
       <button className='seats__confirm-btn' onClick={() => this.confirmPurchase()}>Подтвердить покупку!</button>
+      <button className='seats__disselect-btn' onClick={() => this.cancelSelect()}>Отменить выбор мест</button>
       <ul className="seats__pending-list">
         {this.props.pendingSeats.map( (i,index) => <PendingSeat key={index} seat={i} price={this.props.sessions[this.props.activeSession].cost} />)}
         <span className={this.props.pendingSeats.length<2 ? "seats__pending-overall  seats__pending-overall--hidden" : "seats__pending-overall"}>Итого: {this.props.pendingSeats.length*this.props.sessions[this.props.activeSession].cost}</span>
@@ -50,11 +55,6 @@ class SeatsList extends React.Component {
       </React.Fragment>);
     }
   }
-}
-
-SeatsList.propTypes = {
-  sessions: PropTypes.array,
-  activeSession: PropTypes.number
 }
 
 export default connect(
@@ -70,17 +70,11 @@ export default connect(
     onCloseSeatsList: () => {
       dispatch({ type: 'CLOSE_SEATSLIST', payload: null})
     },
+    onCancelSelect: () => {
+      dispatch({ type: 'CANCEL_SEATS_SELECT', payload: null})
+    },
     onConfirmPurchase: (session) => {
       dispatch({ type: 'CONFIRM_PURCHASE', payload: session})
     }
   })
 )(SeatsList);
-
-
-function PendingSeat(props) {
-  let row = Math.floor(props.seat/10)+1;
-  let col = props.seat%10+1;
-  return (
-    <li className="seats__pending-item"> Ряд: {row}, Место: {col}, Цена: {props.price}</li>
-  )
-}

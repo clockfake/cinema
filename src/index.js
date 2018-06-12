@@ -4,7 +4,6 @@ import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import generateSessions from '../sessionslist.js';
 import App from './App.js';
 
 function dateIncludes(array, element) {
@@ -24,66 +23,75 @@ const initialState = {
 }
 
 function appManager(state = initialState, action) {
-  if (action.type == 'FETCH_SESSIONS_SUCCESS') {
-    const sessions = action.payload;
-    let daysList = [];
-    sessions.forEach( (i) => {
-      let date = new Date(i.datetime);
-      date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0));
-      if (!dateIncludes(daysList, date)) daysList.push(date);
-    });
-    return {
-      ...state,
-      sessions: sessions,
-      daysList: daysList
+  switch (action.type) {
+    case 'FETCH_SESSIONS_SUCCESS': {
+      const sessions = action.payload;
+      let daysList = [];
+      sessions.forEach( (i) => {
+        let date = new Date(i.datetime);
+        if (!dateIncludes(daysList, date)) daysList.push(date);
+      })
+      return {
+        ...state,
+        sessions: sessions,
+        daysList: daysList
+      }
     }
-  };
-  if (action.type == 'SELECT_SESSION') {
-    return {
-      ...state,
-      activeSession: action.payload
-    }
-  };
 
-  if (action.type == 'SELECT_SEAT') {
-    let pendingSeats = state.pendingSeats.slice();
-    pendingSeats.push(action.payload);
-    return {
-      ...state,
-      pendingSeats: pendingSeats
+    case 'SELECT_SESSION': {
+      return {
+         ...state,
+         activeSession: action.payload
+       }
     }
-  };
 
-  if (action.type == 'CLOSE_SEATSLIST') {
-    return {
-      ...state,
-      activeSession: null,
-      pendingSeats: []
+    case 'SELECT_SEAT': {
+      let pendingSeats = state.pendingSeats.slice();
+       pendingSeats.push(action.payload);
+       return {
+         ...state,
+         pendingSeats: pendingSeats
+       }
     }
-  };
 
-  if (action.type == 'SELECT_DATE') {
-    return {
-      ...state,
-      activeDate: action.payload
+    case 'CLOSE_SEATSLIST': {
+      return {
+         ...state,
+         activeSession: null,
+         pendingSeats: []
+       }
     }
-  };
 
-  if (action.type == 'CONFIRM_PURCHASE') {
-    let pendingSeats = state.pendingSeats.slice();
-    let sessions = state.sessions.slice();
-    pendingSeats.forEach( (i) => {
-      sessions[action.payload].seats[i] = true;
-    })
-    return {
-      ...state,
-      activeSession: null,
-      sessions: sessions,
-      pendingSeats: []
+    case 'CANCEL_SEATS_SELECT': {
+        return {
+          ...state,
+          pendingSeats: []
+        }
     }
-  };
 
-  return state;
+    case 'SELECT_DATE': {
+        return {
+          ...state,
+          activeDate: action.payload
+        }
+    }
+
+    case 'CONFIRM_PURCHASE': {
+        let pendingSeats = state.pendingSeats.slice();
+        let sessions = state.sessions.slice();
+        pendingSeats.forEach( (i) => {
+          sessions[action.payload].seats[i] = true;
+        })
+        return {
+          ...state,
+          activeSession: null,
+          sessions: sessions,
+          pendingSeats: []
+        }
+    }
+    default: return state;
+  }
+
 }
 
 const store = createStore(appManager, composeWithDevTools(applyMiddleware(thunk)));

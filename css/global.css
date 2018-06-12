@@ -185,3 +185,12 @@ body {
 .seats__pending-overall--hidden {
   display: none;
 }
+
+.seats__confirm-btn, .seats__disselect-btn {
+  margin-top: 15px;
+  margin-right: 10px;
+  padding: 10px;
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+}
