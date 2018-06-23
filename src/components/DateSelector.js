@@ -6,19 +6,23 @@ class DateSelector extends React.Component {
   dateSelect(date) {
     this.props.onDateSelect(date);
   }
-
-  render() {
-    let options = {day: 'numeric', month: 'long'}
-
-    //selects 4 days out of all days of film disribution
-    let daysList = [];
-    if (this.props.daysList.length<=4) {daysList = [...this.props.daysList]} else {
-      if (this.props.activeDate == 0) {daysList = this.props.daysList.slice(0,4)} else {
-        if (this.props.activeDate+2 >= this.props.daysList.length) {daysList = this.props.daysList.slice(-4)} else {
-          daysList = this.props.daysList.slice(this.props.activeDate-1,this.props.activeDate+3);
+  //selects 4 days out of all days of film disribution
+  parseDates(daysArr, activeDate) {
+    let daysList;
+    if (daysArr.length<=4) {daysList = [...daysArr]} else {
+      if (activeDate == 0) {daysList = daysArr.slice(0,4)} else {
+        if (activeDate+2 >= daysArr.length) {daysList = daysArr.slice(-4)} else {
+          daysList = daysArr.slice(activeDate-1,activeDate+3);
         }
       }
     }
+    return daysList;
+  }
+
+  render() {
+    let options = {day: 'numeric', month: 'long'}
+    const daysList = this.parseDates(this.props.daysList, this.props.activeDate);
+
     return (
       <ul className="days__list">
         {daysList.map( (i) => {
