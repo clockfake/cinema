@@ -1,8 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PendingSeat from './PendingSeat.js';
+import PendingWindow from './PendingWindow.jsx';
+import generateSessions from '../../sessionsgenerator.js';
 
 class SeatsList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.options = {day: 'numeric', month: 'long',hour:'2-digit',minute:'2-digit'};
+  }
 
   handleClick(seat) {
     if (!this.props.sessions[this.props.activeSession].seats[seat] && this.props.pendingSeats.indexOf(seat) == -1) {
@@ -13,7 +19,7 @@ class SeatsList extends React.Component {
   }
 
   confirmPurchase() {
-    let session = this.props.activeSession;
+    const session = this.props.activeSession;
     this.props.onConfirmPurchase(session);
   }
 
@@ -26,16 +32,15 @@ class SeatsList extends React.Component {
   }
 
   render() {
-    let options = {day: 'numeric', month: 'long',hour:'2-digit',minute:'2-digit'}
-    if (this.props.activeSession == null) {return (<div className='seats  seats--closed'> </div>)} else {
+    if (this.props.activeSession == null) return <div className='seats  seats--closed'> </div>;
     return (
       <React.Fragment>
       <div className='seats  seats--opened'>
         <div className='seats__heading'>
           <p>Заказ билетов на фильм: {this.props.sessions[this.props.activeSession].name}</p>
-          <p>Время сеанса: {new Date(this.props.sessions[this.props.activeSession].datetime).toLocaleString('ru',options)}</p>
+          <p>Время сеанса: {new Date(this.props.sessions[this.props.activeSession].datetime).toLocaleString('ru',this.options)}</p>
         </div>
-        <ul className={'seats__list'}>
+        <ul className='seats__list'>
           {this.props.sessions[this.props.activeSession].seats.map( (i,index) => {
             let seatState = 'seats__item';
             if (i) seatState += '  seats__item--taken';
@@ -51,9 +56,9 @@ class SeatsList extends React.Component {
         <span className={this.props.pendingSeats.length<2 ? "seats__pending-overall  seats__pending-overall--hidden" : "seats__pending-overall"}>Итого: {this.props.pendingSeats.length*this.props.sessions[this.props.activeSession].cost}</span>
       </ul>
       </div>
-      <div className='modal-overlay  modal-overlay--show'></div>
+      <div className='modal-overlay  modal-overlay--show'/>
+      <PendingWindow status={this.props.pendingStatus} onClick={() => this.closeSeatsList()}/>
       </React.Fragment>);
-    }
   }
 }
 
@@ -61,7 +66,8 @@ export default connect(
   state => ({
     sessions: state.sessions,
     activeSession: state.activeSession,
-    pendingSeats: state.pendingSeats
+    pendingSeats: state.pendingSeats,
+    pendingStatus: state.pendingStatus
   }),
   dispatch => ({
     onSelectSeat: (seatBought) => {
@@ -74,7 +80,20 @@ export default connect(
       dispatch({ type: 'CANCEL_SEATS_SELECT', payload: null})
     },
     onConfirmPurchase: (session) => {
-      dispatch({ type: 'CONFIRM_PURCHASE', payload: session})
+      const confirmPurchase = () => dispatch => {
+        dispatch({type:'PENDING_PURCHASE'});
+        let sessionPromise = generateSessions.storeChanges(session);
+        sessionPromise.then(
+          function(result) {
+            dispatch({ type:'CONFIRM_PURCHASE_SUCCESS', payload: session})
+          },
+          function(error) {
+            dispatch({type:'CONFIRM_PURCHASE_FAIL'}, payload: error)
+          }
+        )
+      }
+      dispatch(confirmPurchase());
     }
+
   })
 )(SeatsList);

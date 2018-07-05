@@ -19,7 +19,8 @@ const initialState = {
   activeSession: null,
   daysList: [],
   activeDate: 0,
-  pendingSeats: []
+  pendingSeats: [],
+  pendingStatus: null
 }
 
 function appManager(state = initialState, action) {
@@ -58,7 +59,8 @@ function appManager(state = initialState, action) {
       return {
          ...state,
          activeSession: null,
-         pendingSeats: []
+         pendingSeats: [],
+         pendingStatus: null
        }
     }
 
@@ -76,7 +78,14 @@ function appManager(state = initialState, action) {
         }
     }
 
-    case 'CONFIRM_PURCHASE': {
+    case 'PENDING_PURCHASE': {
+      return {
+        ...state,
+        pendingStatus:'pending'
+      }
+    }
+
+    case 'CONFIRM_PURCHASE_SUCCESS': {
         let pendingSeats = state.pendingSeats.slice();
         let sessions = state.sessions.slice();
         pendingSeats.forEach( (i) => {
@@ -84,9 +93,8 @@ function appManager(state = initialState, action) {
         })
         return {
           ...state,
-          activeSession: null,
           sessions: sessions,
-          pendingSeats: []
+          pendingStatus:'success'
         }
     }
     default: return state;

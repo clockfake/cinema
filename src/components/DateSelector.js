@@ -2,6 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 class DateSelector extends React.Component {
+  constructor(props) {
+    super(props);
+    this.options = {day: 'numeric', month: 'long'};
+  }
 
   dateSelect(date) {
     this.props.onDateSelect(date);
@@ -20,14 +24,13 @@ class DateSelector extends React.Component {
   }
 
   render() {
-    let options = {day: 'numeric', month: 'long'}
     const daysList = this.parseDates(this.props.daysList, this.props.activeDate);
 
     return (
       <ul className="days__list">
         {daysList.map( (i) => {
           let index = this.props.daysList.indexOf(i);
-          let date = i.toLocaleString('ru',options);
+          let date = i.toLocaleString('ru',this.options);
           return (<li className={index == this.props.activeDate? "days__item  days__item--highlighted": "days__item"} key={index} onClick={() => this.dateSelect(index)}>{date}</li>)
         })}
       </ul>

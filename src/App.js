@@ -12,6 +12,7 @@ class App extends React.Component {
   }
 
   render() {
+    if (this.props.sessionsLength === 0) return <div className="loading-container"><div className="lds-ring"><div></div><div></div><div></div><div></div></div></div>
     return (
       <div>
         <DateSelector/>
@@ -23,7 +24,9 @@ class App extends React.Component {
 }
 
 export default connect(
-  state => ({}),
+  state => ({
+    sessionsLength: state.sessions.length
+  }),
   dispatch => ({
     onGetSessions: () => {
       const getSessions = () => dispatch => {
