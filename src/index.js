@@ -7,11 +7,10 @@ import thunk from 'redux-thunk';
 import App from './App.js';
 
 function dateIncludes(array, element) {
-    let returnvalue = false;
     array.forEach( (i) => {
-      if (i.getDate() == element.getDate() && i.getMonth() == element.getMonth()) returnvalue = true;
+      if (i.getDate() === element.getDate() && i.getMonth() === element.getMonth()) return true;
     });
-    return returnvalue;
+    return false;
 };
 
 const initialState = {
@@ -89,7 +88,7 @@ function appManager(state = initialState, action) {
         let pendingSeats = state.pendingSeats.slice();
         let sessions = state.sessions.slice();
         pendingSeats.forEach( (i) => {
-          sessions[action.payload].seats[i] = true;
+          sessions[state.activeSession].seats[i] = true;
         })
         return {
           ...state,

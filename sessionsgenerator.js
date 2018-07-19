@@ -30,8 +30,9 @@ const generateSessions = {
     });
   },
   storeChanges: function(payload) {
-    importedData.push(payload);
     return new Promise((resolve, reject) => {
+      importedData.push(payload);
+      console.log(payload);
       setTimeout(() => resolve('success'), 1500);
     })
   }
