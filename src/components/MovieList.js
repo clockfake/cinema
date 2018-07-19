@@ -4,6 +4,10 @@ import Movie from './Movie.js';
 
 class MovieList extends React.Component {
 
+  handleSelect(id) {
+    this.props.onSelectSession(id);
+  }
+
   render() {
     //need to reform date structure to match "given day -> movies thats go in this day -> sessions for given movie that runs that day"
     let movieList = [];
@@ -11,7 +15,7 @@ class MovieList extends React.Component {
     this.props.sessions.forEach( (i) => {
       filmExists = false;
       for (let j = 0; j<movieList.length; j++) {
-        if (i.name == movieList[j].name) {
+        if (i.name === movieList[j].name) {
           filmExists = true;
           movieList[j].sessions.push(i);
         }
@@ -26,10 +30,7 @@ class MovieList extends React.Component {
 
     return (
       <div className='films-container'>
-      {movieList.map( (i,index) => {
-        return(<Movie key={index} name={i.name} sessions={i.sessions} />)
-      })
-      }
+        {movieList.map( (i,index) => <Movie key={index} name={i.name} sessions={i.sessions} handleSelect={(id) => this.handleSelect(id)}/>)}
       </div>
     );
   }
@@ -42,4 +43,8 @@ export default connect(
       return date.getDate() == state.daysList[state.activeDate].getDate() && date.getMonth() == state.daysList[state.activeDate].getMonth();
     })
   }),
-  dispatch => ({}))(MovieList);
+  dispatch => ({
+    onSelectSession: (id) => {
+      dispatch({type: 'SELECT_SESSION', payload: id});
+    }
+  }))(MovieList);
