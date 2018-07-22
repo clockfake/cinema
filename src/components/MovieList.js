@@ -4,10 +4,6 @@ import Movie from './Movie.js';
 
 class MovieList extends React.Component {
 
-  handleSelect(id) {
-    this.props.onSelectSession(id);
-  }
-
   render() {
     //need to reform date structure to match "given day -> movies thats go in this day -> sessions for given movie that runs that day"
     let movieList = [];
@@ -30,7 +26,7 @@ class MovieList extends React.Component {
 
     return (
       <div className='films-container'>
-        {movieList.map( (i,index) => <Movie key={index} name={i.name} sessions={i.sessions} handleSelect={(id) => this.handleSelect(id)}/>)}
+        {movieList.map( (i,index) => <Movie key={index} name={i.name} sessions={i.sessions} handleSelect={(id) => this.props.onSelectSession(id)}/>)}
       </div>
     );
   }

@@ -18,18 +18,6 @@ class SeatsList extends React.Component {
     }
   }
 
-  confirmPurchase() {
-    this.props.onConfirmPurchase({id: this.props.session.id,seats: this.props.pendingSeats});
-  }
-
-  closeSeatsList() {
-    this.props.onCloseSeatsList();
-  }
-
-  cancelSelect() {
-    this.props.onCancelSelect();
-  }
-
   render() {
     if (this.props.activeSession == null) return <div className='seats  seats--closed'> </div>;
     return (
@@ -47,16 +35,16 @@ class SeatsList extends React.Component {
             return (<li key={index} className={seatState} onClick={() => this.handleClick(index)}> {index+1} </li>);
           })}
         </ul>
-      <button className='seats__close-btn' onClick={() => this.closeSeatsList()}>Close</button>
-      <button className='seats__confirm-btn' onClick={() => this.confirmPurchase()}>Подтвердить покупку!</button>
-      <button className='seats__disselect-btn' onClick={() => this.cancelSelect()}>Отменить выбор мест</button>
+      <button className='seats__close-btn' onClick={() => this.props.onCloseSeatsList()}>Close</button>
+      <button className='seats__confirm-btn' onClick={() => this.props.onConfirmPurchase({id: this.props.session.id,seats: this.props.pendingSeats})}>Подтвердить покупку!</button>
+      <button className='seats__disselect-btn' onClick={() => this.props.onCancelSelect()}>Отменить выбор мест</button>
       <ul className="seats__pending-list">
         {this.props.pendingSeats.map( (i,index) => <PendingSeat key={index} seat={i} price={this.props.session.cost} />)}
         <span className={this.props.pendingSeats.length<2 ? "seats__pending-overall  seats__pending-overall--hidden" : "seats__pending-overall"}>Итого: {this.props.pendingSeats.length*this.props.session.cost}</span>
       </ul>
       </div>
       <div className='modal-overlay  modal-overlay--show'/>
-      <PendingWindow status={this.props.pendingStatus} onClick={() => this.closeSeatsList()}/>
+      <PendingWindow status={this.props.pendingStatus} onClick={() => this.props.onCloseSeatsList()}/>
       </React.Fragment>);
   }
 }
