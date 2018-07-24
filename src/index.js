@@ -6,13 +6,6 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import App from './App.js';
 
-function dateIncludes(array, element) {
-    array.forEach( (i) => {
-      if (i.getDate() === element.getDate() && i.getMonth() === element.getMonth()) return true;
-    });
-    return false;
-};
-
 const initialState = {
   sessions: [],
   activeSession: null,
@@ -29,7 +22,7 @@ function appManager(state = initialState, action) {
       let daysList = [];
       sessions.forEach( (i) => {
         let date = new Date(i.datetime);
-        if (!dateIncludes(daysList, date)) daysList.push(date);
+        if (!daysList.some((j) => j.getDate() === date.getDate() && j.getMonth() === date.getMonth())) daysList.push(date);
       })
       return {
         ...state,

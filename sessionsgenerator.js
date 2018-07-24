@@ -26,14 +26,14 @@ const generateSessions = {
       date_i.setHours(date_i.getHours()+2);
     }
     return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(sessions), 1500);
+      setTimeout(() => resolve(sessions), 800);
     });
   },
   storeChanges: function(payload) {
     return new Promise((resolve, reject) => {
       importedData.push(payload);
       console.log(payload);
-      setTimeout(() => resolve('success'), 1500);
+      setTimeout(() => resolve('success'), 800);
     })
   }
 }
